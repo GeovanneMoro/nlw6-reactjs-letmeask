@@ -9,6 +9,9 @@ import { RoomCode } from "../components/RoomCode";
 import { Question } from "../components/Question";
 
 import deleteImg from "../assets/images/delete.svg";
+import checkImg from "../assets/images/check.svg";
+import answerImg from "../assets/images/answer.svg";
+
 import logoImg from "../assets/images/logo.svg";
 import "../styles/room.scss";
 
@@ -26,6 +29,18 @@ const AdminRoom = () => {
     await database.ref(`rooms/${id}`).update({ closedAt: new Date() });
 
     history.push("/");
+  };
+
+  const handleCheckQuestion = async (questionId: string) => {
+    await database
+      .ref(`rooms/${id}/questions/${questionId}`)
+      .update({ isAnswered: true });
+  };
+
+  const handleHighlightQuestion = async (questionId: string) => {
+    await database
+      .ref(`rooms/${id}/questions/${questionId}`)
+      .update({ isHighlighted: true });
   };
 
   const handleDeleteQuestion = async (questionId: string) => {
@@ -63,7 +78,25 @@ const AdminRoom = () => {
               key={question.id}
               content={question.content}
               author={question.author}
+              isAnswered={question.isAnswered}
+              isHighlighted={question.isHighlighted}
             >
+              {!question.isAnswered && (
+                <>
+                  <button
+                    type="submit"
+                    onClick={() => handleCheckQuestion(question.id)}
+                  >
+                    <img src={checkImg} alt="Marcar pergunta como respondida" />
+                  </button>
+                  <button
+                    type="submit"
+                    onClick={() => handleHighlightQuestion(question.id)}
+                  >
+                    <img src={answerImg} alt="Dar destaque à pergunta" />
+                  </button>
+                </>
+              )}
               <button
                 type="submit"
                 onClick={() => handleDeleteQuestion(question.id)}

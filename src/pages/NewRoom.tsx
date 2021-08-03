@@ -1,38 +1,38 @@
-import { FormEvent, useState, useRef } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { FormEvent, useState, useRef } from "react";
+import { Link, useHistory } from "react-router-dom";
 
-import { useAuth } from '../hooks/useAuth';
-import { database } from '../services/firebase';
+import { useAuth } from "../hooks/useAuth";
+import { database } from "../services/firebase";
 
-import illustrationImg from '../assets/images/illustration.svg';
-import logoImg from '../assets/images/logo.svg';
+import illustrationImg from "../assets/images/illustration.svg";
+import logoImg from "../assets/images/logo.svg";
 
-import { Button } from '../components/Button';
+import { Button } from "../components/Button";
 
-import '../styles/auth.scss';
+import "../styles/auth.scss";
 
 const NewRoom = () => {
   const { user } = useAuth();
   const history = useHistory();
   // const inputRoom = useRef<HTMLInputElement>(null);
-  const [newRoom, setNewRoom] = useState('');
+  const [newRoom, setNewRoom] = useState("");
 
   const handleCreateRoom = async (e: FormEvent) => {
     e.preventDefault();
 
     // console.log(inputRoom.current?.value);
-    if (newRoom.trim() === '') {
+    if (newRoom.trim() === "") {
       return;
     }
 
-    const roomRef = database.ref('rooms');
+    const roomRef = database.ref("rooms");
 
     const firebaseRoom = await roomRef.push({
       title: newRoom,
       authorId: user?.id,
     });
 
-    setNewRoom('');
+    setNewRoom("");
 
     history.push(`/rooms/${firebaseRoom.key}`);
   };
